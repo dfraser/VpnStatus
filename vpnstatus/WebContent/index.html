@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>VPN Status</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <script src="http://code.jquery.com/jquery.js"></script>
+  	<script src="js/bootstrap.min.js"></script>
+ 	<script>
+ 		function loadVpnStatus(engine) {
+ 			$.get('http://localhost:8080/vpnstatus/all/'+engine,function(data){
+ 				$('#content').empty();
+                $(data).find('host').each(function(){
+                    var $host = $(this);
+                    var html = '<div class="data">';                    
+                    html += '<h3>Engine: ' + $host.find('name').text() + '</h3>';
+                    html += '<div>VPN Address: <b>' + $host.find('virtualAddress').text() + '</b></div>';                   
+                    html += '<div>Real Address: <b>' + $host.find('realAddress').text() + '</b></div>';                   
+                    html += '<div>Connected Since: <b>' + $host.find('connectedSince').text() + '</b></div>';
+                    html += '<div>Bytes Transmitted: <b>' + $host.find('bytesTx').text() + '</b></div>';
+                    html += '<div>Bytes Received: <b>' + $host.find('bytesRx').text() + '</b></div>';
+                    $('#content').append(html);
+                });     
+ 			});
+ 		};
+ 		function loadAllEngines() {
+ 			$.get('http://localhost:8080/vpnstatus/all', function(data) {
+ 				var $hosts = $(this);
+ 			});
+ 		}
+
+ 		window.setInterval("loadVpnStatus('osn004483')",10000);
+
+	</script>
+  	<div class="container">
+   	 <p id="content">Insert content here.</p>
+    </div>
+  </body>
+</html>
